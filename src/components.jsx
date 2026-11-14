@@ -290,11 +290,12 @@ export function ErrorBanner({ message, onDismiss }) {
 
 let nextArtworkFileId = 0;
 
-export function FileUploadZone({ onFilesSelected, inputRef }) {
+export function FileUploadZone({ onFilesSelected, inputRef, multiple = true }) {
   const [dragging, setDragging] = useState(false);
 
   function chooseFiles(fileList) {
-    const files = Array.from(fileList || []).map((file) => {
+    const selectedFiles = Array.from(fileList || []);
+    const files = (multiple ? selectedFiles : selectedFiles.slice(0, 1)).map((file) => {
       let error;
       if (file.size > 300 * 1024 * 1024) {
         error = "File exceeds 300MB limit. Please upload a smaller file.";
@@ -384,7 +385,7 @@ export function FileUploadZone({ onFilesSelected, inputRef }) {
         ref={inputRef}
         type="file"
         accept=".jpg,.jpeg,.png,.pdf,.ai"
-        multiple
+        multiple={multiple}
         tabIndex={-1}
         className="sr-only"
         onChange={(event) => {

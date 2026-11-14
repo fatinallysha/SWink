@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
+import { unlink } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import multer from "multer";
@@ -27,7 +28,6 @@ export const uploadArtwork = multer({
   }),
   limits: {
     fileSize: maxFileSize,
-    files: 1,
   },
   fileFilter: (req, file, callback) => {
     if (!Object.hasOwn(extensionsByMimeType, file.mimetype)) {
@@ -42,7 +42,19 @@ export const uploadArtwork = multer({
   },
 });
 
-export function handleArtworkUploadError(error, req, res, next) {
+export async function handleArtworkUploadError(error, req, res, next) {
+  try {
+    await Promise.all(
+      (req.files || []).map((file) =>
+        unlink(file.path).catch((cleanupError) => {
+          if (cleanupError.code !== "ENOENT") throw cleanupError;
+        }),
+      ),
+    );
+  } catch (cleanupError) {
+    return next(cleanupError);
+  }
+
   if (error instanceof multer.MulterError) {
     if (error.code === "LIMIT_FILE_SIZE") {
       return res.status(413).json({
@@ -52,7 +64,7 @@ export function handleArtworkUploadError(error, req, res, next) {
 
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
       return res.status(400).json({
-        message: "Upload one artwork file using the 'artwork' field.",
+        message: "Upload artwork files using the 'artwork' field.",
       });
     }
 

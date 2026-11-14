@@ -10,7 +10,7 @@ const router = Router();
 
 router.post(
   "/",
-  uploadArtwork.single("artwork"),
+  uploadArtwork.array("artwork"),
   handleArtworkUploadError,
   validateQuotation,
   createQuotation,
