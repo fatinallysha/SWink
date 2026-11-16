@@ -67,7 +67,22 @@ const serviceFields = {
 
 const customerFieldNames = ["name", "company", "phoneNumber", "address", "remark"];
 
-async function submitQuotationRequest(_formData) {}
+async function submitQuotationRequest(formData) {
+  let response;
+  try {
+    // Do not set Content-Type: the browser adds the multipart boundary itself.
+    response = await fetch("/api/quotations", { method: "POST", body: formData });
+  } catch {
+    throw new Error("Could not reach the server. Please check your connection and try again.");
+  }
+
+  if (!response.ok) {
+    const result = await response.json().catch(() => null);
+    throw new Error(
+      result?.message || "Could not submit your quotation request. Please try again.",
+    );
+  }
+}
 
 function App() {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -110,6 +125,7 @@ function QuotationRequestPage({ onSubmitSuccess }) {
   const [errors, setErrors] = useState({});
   const [showFormError, setShowFormError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const fileInputRef = useRef(null);
   const fields = serviceFields[serviceType] || [];
 
@@ -227,9 +243,14 @@ function QuotationRequestPage({ onSubmitSuccess }) {
     formData.append("remark", customerDetails.remark.trim());
 
     setSubmitting(true);
-    await submitQuotationRequest(formData);
-    await new Promise((resolve) => window.setTimeout(resolve, 1200));
-    onSubmitSuccess();
+    setSubmitError("");
+    try {
+      await submitQuotationRequest(formData);
+      onSubmitSuccess();
+    } catch (error) {
+      setSubmitError(error.message);
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -465,6 +486,12 @@ function QuotationRequestPage({ onSubmitSuccess }) {
               />
             </Card>
           </section>
+
+          {submitError && (
+            <div className="mt-5">
+              <ErrorBanner message={submitError} onDismiss={() => setSubmitError("")} />
+            </div>
+          )}
 
           <PrimaryButton
             type="submit"
