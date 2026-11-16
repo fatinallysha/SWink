@@ -17,3 +17,13 @@ and PostScript files are accepted up to 300 MB each. Include `name`,
 quotation and all its items are saved in one database transaction. Successful
 requests return the new `quotation_id`. Legacy quotation columns are retained
 as nullable for existing database compatibility.
+
+## Run locally
+
+1. Start MySQL (XAMPP Control Panel) and apply `server/database/schema.sql` once.
+2. Copy `.env.example` to `.env`.
+3. Run `npm install` (first time only), then `npm run dev:all`.
+
+`npm run dev:all` starts the API (port 3000) and the website (port 5173) together
+and opens the site in your browser. Press Ctrl+C to stop both. You can still start
+them separately with `npm run dev:api` and `npm run dev`.

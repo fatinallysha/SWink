@@ -227,7 +227,7 @@ export function PageHeader({ onBack, userMenu }) {
           </button>
         )}
         <a href="/" aria-label="SWink home" className="inline-flex items-center">
-          <img src="/logo.png" alt="SWink" className="h-10 w-auto" />
+          <img src="/logo.png" alt="SWink" className="h-28 w-28" />
         </a>
       </div>
       {userMenu}
