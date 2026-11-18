@@ -26,11 +26,13 @@ const serviceFields = {
     { name: "printingMethod", label: "Printing Method", type: "select", options: ["Silkscreen", "Heat Press", "DTF", "Embroidery", "Sublimation"] },
     { name: "material", label: "Material", type: "select", options: ["Eyelet", "Interlock", "Lycra", "RJ", "Diamond", "MF Ultra", "Cotton", "Polo Honeycomb", "Microfiber"] },
     { name: "gsm", label: "GSM", type: "text", placeholder: "Material thickness" },
+    { name: "quantity", label: "Quantity", type: "number" },
   ],
   Banner: [
     { name: "product", label: "Product", type: "select", options: ["Banner", "Bunting", "Backdrop", "Roll-Up Banner"] },
     { name: "bannerSize", label: "Banner Size", type: "text", placeholder: "e.g., Width X Height (Inch)" },
     { name: "finishing", label: "Finishing", type: "select", options: ["Eyelets / Hole", "Rope", "Pipe"] },
+    { name: "quantity", label: "Quantity", type: "number" },
   ],
   Sticker: [
     { name: "stickerType", label: "Sticker Type", type: "select", options: ["Transparent", "Waterproof", "Label Sticker", "PVC Outdoor"] },
@@ -48,6 +50,7 @@ const serviceFields = {
     { name: "size", label: "Size", type: "select", options: ["A4", "A5", "DL"] },
     { name: "foldType", label: "Fold Type", type: "select", options: ["None", "Bi-Fold", "Tri-Fold", "Z-Fold"] },
     { name: "paper", label: "Paper", type: "select", options: ["128 gsm", "157 gsm", "210 gsm"] },
+    { name: "quantity", label: "Quantity", type: "number" },
   ],
   "Gifts & Corporate Items": [
     { name: "product", label: "Product", type: "select", options: ["Mug", "Keychain", "Lanyard", "Notebook", "Pen", "Tumbler", "USB Drive", "Calendar"] },

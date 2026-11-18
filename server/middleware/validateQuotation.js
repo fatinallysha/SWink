@@ -7,11 +7,13 @@ const serviceFields = {
     printingMethod: ["Silkscreen", "Heat Press", "DTF", "Embroidery", "Sublimation"],
     material: ["Eyelet", "Interlock", "Lycra", "RJ", "Diamond", "MF Ultra", "Cotton", "Polo Honeycomb", "Microfiber"],
     gsm: null,
+    quantity: "number",
   },
   Banner: {
     product: ["Banner", "Bunting", "Backdrop", "Roll-Up Banner"],
     bannerSize: null,
     finishing: ["Eyelets / Hole", "Rope", "Pipe"],
+    quantity: "number",
   },
   Sticker: {
     stickerType: ["Transparent", "Waterproof", "Label Sticker", "PVC Outdoor"],
@@ -29,6 +31,7 @@ const serviceFields = {
     size: ["A4", "A5", "DL"],
     foldType: ["None", "Bi-Fold", "Tri-Fold", "Z-Fold"],
     paper: ["128 gsm", "157 gsm", "210 gsm"],
+    quantity: "number",
   },
   "Gifts & Corporate Items": {
     product: ["Mug", "Keychain", "Lanyard", "Notebook", "Pen", "Tumbler", "USB Drive", "Calendar"],
