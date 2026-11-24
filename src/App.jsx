@@ -4,8 +4,10 @@ import {
   DestructiveButton,
   ErrorBanner,
   FileUploadZone,
+  FormFieldWrapper,
   PageHeader,
   PrimaryButton,
+  SecondaryButton,
   SelectDropdown,
   TextInput,
 } from "./components.jsx";
@@ -136,6 +138,16 @@ function QuotationRequestPage({ onSubmitSuccess }) {
     const { name, value } = event.target;
     setDetails((current) => ({ ...current, [name]: value }));
     setErrors((current) => ({ ...current, [name]: undefined }));
+  }
+
+  function adjustQuantity(amount) {
+    const quantity = Number(details.quantity);
+    const currentQuantity = Number.isInteger(quantity) && quantity > 0 ? quantity : 0;
+    setDetails((current) => ({
+      ...current,
+      quantity: String(Math.max(1, currentQuantity + amount)),
+    }));
+    setErrors((current) => ({ ...current, quantity: undefined }));
   }
 
   function updateService(event) {
@@ -336,6 +348,50 @@ function QuotationRequestPage({ onSubmitSuccess }) {
                           ...field.options.map((option) => ({ value: option, label: option })),
                         ]}
                       />
+                    ) : field.name === "quantity" ? (
+                      <FormFieldWrapper
+                        key={field.name}
+                        label={field.label}
+                        required
+                        error={errors[field.name]}
+                        helperText={field.helperText}
+                        htmlFor="service-quantity"
+                      >
+                        <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] gap-2">
+                          <SecondaryButton
+                            type="button"
+                            aria-label="Decrease quantity"
+                            onClick={() => adjustQuantity(-1)}
+                            disabled={!Number.isInteger(Number(details.quantity)) || Number(details.quantity) <= 1}
+                            className="px-0"
+                          >
+                            -
+                          </SecondaryButton>
+                          <input
+                            id="service-quantity"
+                            name={field.name}
+                            type="number"
+                            min="1"
+                            inputMode="numeric"
+                            required
+                            value={details[field.name] || ""}
+                            onChange={updateField}
+                            aria-invalid={Boolean(errors[field.name])}
+                            aria-describedby={errors[field.name] || field.helperText ? "service-quantity-description" : undefined}
+                            className={`min-h-11 w-full rounded-lg border bg-neutral-900 px-3 py-2.5 text-center text-sm text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${
+                              errors[field.name] ? "border-danger" : "border-border"
+                            }`}
+                          />
+                          <SecondaryButton
+                            type="button"
+                            aria-label="Increase quantity"
+                            onClick={() => adjustQuantity(1)}
+                            className="px-0"
+                          >
+                            +
+                          </SecondaryButton>
+                        </div>
+                      </FormFieldWrapper>
                     ) : (
                       <TextInput
                         key={field.name}
